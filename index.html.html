@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Etiqueta INGETEK</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #eee; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
+.btn-print {
+  background: #0C3D6B; color: white; border: none; border-radius: 8px;
+  padding: 12px 32px; font-size: 15px; font-weight: 700; cursor: pointer;
+  margin-bottom: 20px;
+}
+.btn-print:hover { background: #185FA5; }
+
+/* ETIQUETA */
+.etiqueta {
+  width: 900px;
+  border: 3px solid #0C3D6B;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+/* HEADER */
+.et-head {
+  background: #0C3D6B;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+}
+.et-logo { display: flex; align-items: center; gap: 12px; }
+.et-dots { display: grid; grid-template-columns: repeat(3,10px); gap: 4px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dg { background: #1DB38A; }
+.dd { background: #0F7A60; }
+.et-brand-name { color: white; font-size: 26px; font-weight: 900; letter-spacing: 2px; line-height: 1; }
+.et-brand-sub { color: #7FB8E0; font-size: 10px; letter-spacing: 3px; margin-top: 2px; }
+.et-div { width: 2px; height: 50px; background: rgba(255,255,255,0.3); margin: 0 16px; }
+.et-title-wrap { display: flex; align-items: center; gap: 12px; }
+.et-icon-circle { background: rgba(255,255,255,0.15); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.et-mant { color: white; font-size: 16px; font-weight: 700; letter-spacing: 1px; text-align: right; }
+.et-prev { color: #F49A1A; font-size: 24px; font-weight: 900; letter-spacing: 2px; text-align: right; }
+
+/* BODY */
+.et-body { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 280px; }
+
+/* LEFT */
+.et-left { padding: 16px 20px; border-right: 2px solid #e8e8e8; }
+.et-id-label { font-size: 12px; font-weight: 700; color: #333; letter-spacing: 1px; }
+.et-id { font-size: 40px; font-weight: 900; color: #0C3D6B; line-height: 1; margin: 4px 0 14px; }
+.et-info-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+.et-info-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.et-info-sub { font-size: 9px; font-weight: 700; color: #666; letter-spacing: 1px; text-transform: uppercase; }
+.et-info-val { font-size: 14px; font-weight: 700; color: #111; }
+.et-grid2 { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
+.et-cell { padding: 8px 12px; }
+.et-cell:nth-child(odd) { border-right: 1px solid #ddd; }
+.et-cell:nth-child(n+3) { border-top: 1px solid #ddd; }
+.et-cell-lbl { font-size: 9px; font-weight: 700; color: #666; letter-spacing: 0.5px; text-transform: uppercase; }
+.et-cell-val { font-size: 12px; font-weight: 700; font-family: 'Courier New', monospace; color: #111; margin-top: 2px; }
+
+/* RIGHT */
+.et-right { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.et-ult { background: #1A6B3A; border-radius: 8px; padding: 10px 14px; }
+.et-ult-lbl { font-size: 9px; font-weight: 700; color: #90D4AA; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+.et-ult-fecha { font-size: 26px; font-weight: 900; color: white; letter-spacing: 1px; }
+.et-prox { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #eee; }
+.et-prox-lbl { font-size: 10px; font-weight: 700; color: #1A6B3A; letter-spacing: 1px; }
+.et-prox-val { font-size: 16px; font-weight: 900; color: #0C3D6B; }
+.et-oblig { border: 2px solid #F49A1A; border-radius: 8px; overflow: hidden; }
+.et-oblig-top { display: flex; align-items: center; gap: 8px; padding: 5px 12px; }
+.et-oblig-title { font-size: 13px; font-weight: 700; color: #F49A1A; }
+.et-oblig-months { background: #F49A1A; text-align: center; font-size: 15px; font-weight: 900; color: white; padding: 5px; letter-spacing: 1px; }
+.et-scan-box { background: #0C3D6B; border-radius: 8px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; }
+.et-scan-left { flex: 1; }
+.et-scan-title { font-size: 11px; font-weight: 700; color: white; margin-bottom: 4px; }
+.et-scan-item { font-size: 10px; color: #90C8E8; margin-bottom: 2px; }
+.et-scan-item::before { content: "● "; color: #1DB38A; }
+.et-scan-btn { background: #1A6B3A; color: white; border-radius: 5px; padding: 4px 8px; font-size: 9px; font-weight: 700; margin-top: 5px; display: inline-block; }
+.et-qr-wrap { flex-shrink: 0; background: white; padding: 4px; border-radius: 6px; }
+
+/* FOOTER */
+.et-foot {
+  background: #0C3D6B;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 8px 20px;
+  gap: 16px;
+}
+.et-status-lbl { color: #7FB8E0; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.et-status-badge { color: white; border-radius: 20px; padding: 5px 18px; font-size: 13px; font-weight: 700; margin-top: 3px; display: inline-block; }
+.et-foot-center { color: #7FB8E0; font-size: 8px; text-align: center; }
+.et-web { color: white; font-size: 11px; font-weight: 700; text-align: right; }
+
+/* IMPRESIÓN */
+@media print {
+  @page { size: A4 landscape; margin: 8mm; }
+  body { background: white; padding: 0; }
+  .btn-print { display: none !important; }
+  .etiqueta {
+    width: 100%;
+    box-shadow: none;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .et-head, .et-ult, .et-oblig-months, .et-scan-box, .et-scan-btn, .et-foot,
+  .dg, .dd, .et-status-badge {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+
+<div class="etiqueta" id="etiqueta"></div>
+
+<script>
+// ── Leer parámetros de la URL ──────────────────────────────────────────
+function getParam(name, def) {
+  var u = new URLSearchParams(window.location.search);
+  return u.get(name) ? decodeURIComponent(u.get(name)) : def;
+}
+
+var pid    = getParam('id',       'IMP-TLA-001');
+var ubi    = getParam('ubi',      'TLALNEPANTLA - PRODUCCIÓN');
+var equipo = getParam('equipo',   'HP LaserJet Pro M404dw');
+var marca  = getParam('marca',    'HP');
+var modelo = getParam('modelo',   'LaserJet Pro M404dw');
+var serie  = getParam('serie',    'CNB2L1X3KZ');
+var tag    = getParam('tag',      'ING-PRN-001');
+var ult    = getParam('ult',      'DICIEMBRE 2025');
+var prox   = getParam('prox',     'JUNIO 2026');
+var estatus= getParam('estatus',  'OPERATIVO');
+
+var BASE = 'https://apps.powerapps.com/play/e/default-a4067d12-2fc0-4367-a213-9e4031cbc173/a/11c50706-e0eb-4894-ad63-1e0e5eaf885f?tenantId=a4067d12-2fc0-4367-a213-9e4031cbc173&ImpresoraID=';
+var url = BASE + encodeURIComponent(pid);
+
+function statusColor(s) {
+  s = (s || '').toUpperCase();
+  if (s.indexOf('DA') >= 0) return '#C0392B';
+  if (s.indexOf('VENCID') >= 0) return '#A32D2D';
+  return '#1A6B3A';
+}
+
+// ── Generar etiqueta ──────────────────────────────────────────────────
+document.getElementById('etiqueta').innerHTML = `
+  <div class="et-head">
+    <div class="et-logo">
+      <div class="et-dots">
+        <div class="dot dg"></div><div class="dot dd"></div><div class="dot dg"></div>
+        <div class="dot dd"></div><div class="dot dg"></div><div class="dot dd"></div>
+        <div class="dot dg"></div><div class="dot dd"></div><div class="dot dg"></div>
+      </div>
+      <div>
+        <div class="et-brand-name">INGETEK</div>
+        <div class="et-brand-sub">CONTROL DE ACTIVOS</div>
+      </div>
+    </div>
+    <div class="et-div"></div>
+    <div class="et-title-wrap">
+      <div class="et-icon-circle">🔧</div>
+      <div>
+        <div class="et-mant">MANTENIMIENTO</div>
+        <div class="et-prev">PREVENTIVO</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="et-body">
+    <div class="et-left">
+      <div class="et-id-label">ID ACTIVO:</div>
+      <div class="et-id">${pid}</div>
+      <div class="et-info-row">
+        <div class="et-info-icon">📍</div>
+        <div><div class="et-info-sub">UBICACIÓN:</div><div class="et-info-val">${ubi}</div></div>
+      </div>
+      <div class="et-info-row" style="border-bottom:none;margin-bottom:12px">
+        <div class="et-info-icon">🖨️</div>
+        <div><div class="et-info-sub">EQUIPO:</div><div class="et-info-val">${equipo}</div></div>
+      </div>
+      <div class="et-grid2">
+        <div class="et-cell"><div class="et-cell-lbl">MARCA:</div><div class="et-cell-val">${marca}</div></div>
+        <div class="et-cell"><div class="et-cell-lbl">MODELO:</div><div class="et-cell-val">${modelo}</div></div>
+        <div class="et-cell"><div class="et-cell-lbl">NÚMERO DE SERIE:</div><div class="et-cell-val">${serie}</div></div>
+        <div class="et-cell"><div class="et-cell-lbl">ASSET TAG INTERNO:</div><div class="et-cell-val">${tag}</div></div>
+      </div>
+    </div>
+
+    <div class="et-right">
+      <div class="et-ult">
+        <div class="et-ult-lbl">ÚLTIMO MANTENIMIENTO REALIZADO</div>
+        <div class="et-ult-fecha">${ult}</div>
+      </div>
+      <div class="et-prox">
+        <div class="et-prox-lbl">PRÓXIMO MANTENIMIENTO</div>
+        <div class="et-prox-val">${prox}</div>
+      </div>
+      <div class="et-oblig">
+        <div class="et-oblig-top"><span>⚠️</span><span class="et-oblig-title">MANTENIMIENTO OBLIGATORIO</span></div>
+        <div class="et-oblig-months">JUNIO / DICIEMBRE</div>
+      </div>
+      <div class="et-scan-box">
+        <div class="et-scan-left">
+          <div class="et-scan-title">ESCANEAR PARA:</div>
+          <div class="et-scan-item">Ver historial</div>
+          <div class="et-scan-item">Subir evidencia</div>
+          <div class="et-scan-item">Reportar incidencias</div>
+          <div class="et-scan-btn">MANTENEMOS NUESTROS EQUIPOS OPERATIVOS</div>
+        </div>
+        <div class="et-qr-wrap" id="qr"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="et-foot">
+    <div>
+      <div class="et-status-lbl">ESTATUS DEL EQUIPO:</div>
+      <div class="et-status-badge" style="background:${statusColor(estatus)}">✔ ${estatus}</div>
+    </div>
+    <div class="et-foot-center">
+      LA PREVENCIÓN HOY, EVITA FALLAS MAÑANA. &nbsp;|&nbsp; CUIDAMOS NUESTROS ACTIVOS, CUIDAMOS NUESTRO NEGOCIO.
+    </div>
+    <div class="et-web">www.ingetek.com</div>
+  </div>
+`;
+
+// ── Generar QR ────────────────────────────────────────────────────────
+new QRCode(document.getElementById('qr'), {
+  text: url, width: 90, height: 90,
+  colorDark: '#0C3D6B', colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.M
+});
+</script>
+</body>
+</html>
