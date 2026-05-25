@@ -510,6 +510,19 @@ var ultTipo     = getParam('ulttipo',      'EXTERNO');
 var ultProv     = getParam('ultprov',      'PROVEEDOR');
 var ultOC       = getParam('ultoc',        'OC-0000');
 
+/* ── Formatea "dd/mm/yyyy" → "12 de MAYO 2026" ── */
+function formatFecha(str) {
+  var meses = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO',
+               'JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+  var p = str.split('/');
+  if (p.length !== 3) return str;
+  var d = p[0].replace(/^0/, '');
+  var m = meses[parseInt(p[1], 10) - 1];
+  var a = p[2];
+  return d + ' de ' + m + ' ' + a;
+}
+var ultFechaFormato = formatFecha(ultFecha);
+
 /* URL destino del QR → Power Apps */
 var BASE = 'https://apps.powerapps.com/play/e/default-a4067d12-2fc0-4367-a213-9e4031cbc173/a/11c50706-e0eb-4894-ad63-1e0e5eaf885f?tenantId=a4067d12-2fc0-4367-a213-9e4031cbc173&ImpresoraID=';
 var qrUrl = BASE + encodeURIComponent(pid);
@@ -606,7 +619,7 @@ document.getElementById('etiqueta').innerHTML = `
         <div class="et-ult-lbl">ÚLTIMO MANTENIMIENTO REALIZADO</div>
         <div class="et-ult-fecha">${ult}</div>
         <hr class="et-ult-sep">
-        <div class="et-ult-detail">📅 ${ultFecha}</div>
+        <div class="et-ult-detail">📅 ${ultFechaFormato}</div>
         <div class="et-ult-chips">
           <span class="et-ult-chip">${ultTipo}</span>
           <span class="et-ult-chip">👷 ${ultProv}</span>
